@@ -23,20 +23,21 @@ credit = pd.read_csv(data_path,
 credit[['VAR26']] = credit[['VAR26']].astype(str)
 
 # Filter by year (i.e. take observations from 1996 to 2002).
-credit = credit[(credit.JAHR >= 1996) & (credit.JAHR <= 2002)]
+credit = credit[(credit['JAHR'] >= 1996) & (credit['JAHR'] <= 2002)]
 
 # Filter by asset size (VAR6).
-credit = credit[(credit.VAR6 >= 10 ** 5) & (credit.VAR6 <= 10 ** 8)]
+credit = credit[(credit['VAR6'] >= 10 ** 5) & (credit['VAR6'] <= 10 ** 8)]
 
 # Filter out companies with 0 values in variables used in the denominator.
-credit = credit[(credit.VAR6 != 0) &
-                (credit.VAR16 != 0) &
-                (credit.VAR1 != 0) &
-                (credit.VAR2 != 0) &
-                (credit.VAR12 != 0) &
-                (credit.VAR12+credit.VAR13 != 0) &
-                (credit.VAR6-credit.VAR5-credit.VAR1-credit.VAR8 != 0) &
-                (credit.VAR19 != 0)]
+credit = credit[
+    (credit['VAR6'] != 0) &
+    (credit['VAR16'] != 0) &
+    (credit['VAR1'] != 0) &
+    (credit['VAR2'] != 0) &
+    (credit['VAR12'] != 0) &
+    (credit['VAR12']+credit['VAR13'] != 0) &
+    (credit['VAR6']-credit['VAR5']-credit['VAR1']-credit['VAR8'] != 0) &
+    (credit['VAR19'] != 0)]
 
 
 # Generate a defaultdict ind, which defaults to other.
@@ -65,7 +66,7 @@ ind_cat = credit.groupby(['T2']).category.value_counts(normalize=True)
 print(ind_cat)
 
 # Remove 'other' category.
-credit = credit[credit.category in categories]
+credit = credit[credit['category'] != 'other']
 
 # Write to csv.
 data_out = os.path.join('data', 'credit_clean.csv')
