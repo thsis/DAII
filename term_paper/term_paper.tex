@@ -1,0 +1,194 @@
+\documentclass{article}
+
+\usepackage[german]{babel}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\begin{document}
+\section{Einleitung}
+
+\section{Daten}
+\subsection{Die Creditreform Datenbank}
+\subsubsection{Datenaufbereitung}
+
+\section{Methoden}
+\subsection{Neuronale Netze}
+\subsection{Theorie}
+\subsection{Architekturen und Hyperparameter}
+
+\tikzset{
+  every neuron/.style={
+    circle,
+    draw,
+    minimum size=1cm},
+  neuron missing/.style={
+    draw=none,
+    scale=4,
+    text height=0.333cm,
+    execute at begin node=\color{black}$\vdots$},
+}
+
+\begin{figure}
+\centering
+\caption{Neuronales Netz mit einer versteckten Schicht.}
+\vspace{2mm}
+\begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
+% plot input layer
+\foreach \m/\1 [count=\y] in {1, 2, missing, 3}
+  \node [every neuron/.try, neuron \m/.try] (input-\m) at (0, 2.5-\y) {};
+
+\foreach \m [count=\y] in {1, missing, 2}
+  \node [every neuron/.try, neuron \m/.try] (hidden-\m) at (2, 2-\y*1.1) {};
+
+\foreach \m [count=\y] in {1}
+  \node [every neuron/.try, neuron \m/.try] (output-\m) at (4, 0) {};
+
+\foreach \l [count=\i] in {1,2,28}
+  \draw [<-] (input-\i) -- ++(-1,0)
+    node [above, midway] {$X_{\l}$};
+
+\foreach \l [count=\i] in {1}
+  \draw [->] (output-\i) -- ++ (1,0)
+    node [above, midway] {$O_\i$};
+
+\foreach \l [count=\i] in {1, 10}
+  \node [above] at (hidden-\i.north) {$H_\l$};
+  
+\foreach \i in {1, 2, 3}
+  \foreach \j in {1,2}
+    \draw [->] (input-\i) -- (hidden-\j);
+
+\foreach \i in {1, 2}
+  \draw [->] (hidden-\i) -- (output-1);
+
+
+\foreach \l [count=\x from 0] in {Input-, Versteckte, Output-}
+  \node [align=center, above] at (\x*2,2) {\l \\ Schicht};
+\end{tikzpicture}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\caption{Neuronales Netz mit zwei versteckten Schichten.}
+\vspace{2mm}
+\begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
+\foreach \m/\1 [count=\y] in {1, 2, missing, 3}
+  \node [every neuron/.try, neuron \m/.try] (input-\m) at (0, 2.5-\y) {};
+
+\foreach \m [count=\y] in {1, missing, 2}
+  \node [every neuron/.try, neuron \m/.try] (hidden1-\m) at (2, 2-\y*1.1) {};
+
+\foreach \m [count=\y] in {1, missing, 2}
+  \node [every neuron/.try, neuron \m/.try] (hidden2-\m) at (4, 2-\y*1.1) {};
+
+\foreach \m [count=\y] in {1}
+  \node [every neuron/.try, neuron \m/.try] (output-\m) at (6, 0) {};
+
+\foreach \l [count=\i] in {1,2,28}
+  \draw [<-] (input-\i) -- ++(-1,0)
+    node [above, midway] {$X_{\l}$};
+
+\foreach \l [count=\i] in {1}
+  \draw [->] (output-\i) -- ++ (1,0)
+    node [above, midway] {$O_\i$};
+
+\foreach \l [count=\i] in {1, 10}
+  \node [above] at (hidden1-\i.north) {$H_{1\l}$};
+
+\foreach \l [count=\i] in {1, 10}
+  \node [above] at (hidden2-\i.north) {$H_{2\l}$};
+
+\foreach \i in {1, 2}
+  \foreach \j in {1,2}
+    \draw [->] (hidden1-\i) -- (hidden2-\j);
+
+\foreach \i in {1, 2}
+  \draw [->] (hidden2-\i) -- (output-1);
+  
+\foreach \i in {1, 2, 3}
+  \foreach \j in {1,2}
+    \draw [->] (input-\i) -- (hidden1-\j);
+
+\foreach \l [count=\x from 0] in {Input-, Erste Versteckte, Zweite Versteckte, Ouput-}
+  \node [align=center, above] at (\x*2,2) {\l \\ Schicht};
+\end{tikzpicture}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\caption{Neuronales Netz mit fünf versteckten Schichten.}
+\vspace{2mm}
+\begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
+% input
+\foreach \m/\1 [count=\y] in {1, 2, missing, 3}
+  \node [every neuron/.try, neuron \m/.try] (input-\m) at (0, 2.5-\y) {};
+
+\foreach \m [count=\y] in {1, missing, 2}
+  \node [every neuron/.try, neuron \m/.try] (hidden1-\m) at (1, 2-\y*1.1) {};
+
+\foreach \m [count=\y] in {1, missing, 2}
+  \node [every neuron/.try, neuron \m/.try] (hidden2-\m) at (2, 2-\y*1.1) {};
+
+\foreach \m [count=\y] in {1, missing, 2}
+  \node [every neuron/.try, neuron \m/.try] (hidden3-\m) at (3, 2-\y*1.1) {};
+
+\foreach \m [count=\y] in {1, missing, 2}
+  \node [every neuron/.try, neuron \m/.try] (hidden4-\m) at (4, 2-\y*1.1) {};
+
+\foreach \m [count=\y] in {1, missing, 2}
+  \node [every neuron/.try, neuron \m/.try] (hidden5-\m) at (5, 2-\y*1.1) {};
+
+
+\foreach \m [count=\y] in {1}
+  \node [every neuron/.try, neuron \m/.try] (output-\m) at (6, 0) {};
+
+\foreach \l [count=\i] in {1,2,28}
+  \draw [<-] (input-\i) -- ++(-1,0)
+    node [above, midway] {$X_{\l}$};
+
+\foreach \l [count=\i] in {1}
+  \draw [->] (output-\i) -- ++ (1,0)
+    node [above, midway] {$O_\i$};
+
+% names of hidden units
+\foreach \j in {1, 2, 3, 4, 5}
+  \foreach \l [count=\i] in {1, 10}
+    \node [above] at (hidden\j-\i.north) {$H_{\j\l}$};
+
+% edges between hidden units
+\foreach \i in {1, 2}
+  \foreach \j in {1,2}
+    \draw [->] (hidden1-\i) -- (hidden2-\j);
+
+\foreach \i in {1, 2}
+  \foreach \j in {1,2}
+    \draw [->] (hidden2-\i) -- (hidden3-\j);
+    
+\foreach \i in {1, 2}
+  \foreach \j in {1,2}
+    \draw [->] (hidden3-\i) -- (hidden4-\j);
+
+\foreach \i in {1, 2}
+  \foreach \j in {1,2}
+    \draw [->] (hidden4-\i) -- (hidden5-\j);
+
+% last edge from 5th hidden layer to output
+\foreach \i in {1, 2}
+  \draw [->] (hidden5-\i) -- (output-1);
+  
+\foreach \i in {1, 2, 3}
+  \foreach \j in {1,2}
+    \draw [->] (input-\i) -- (hidden1-\j);
+
+\foreach \l [count=\x from 0] in {Input-, Versteckte, Ouput-}
+  \node [align=center, above] at (\x*3,2) {\l \\ Schicht(en)};
+\end{tikzpicture}
+\end{figure}
+
+
+\subsection{Ergebnisse}
+
+\section{Zusammenfassung}
+\end{document}
