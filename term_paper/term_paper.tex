@@ -3,13 +3,167 @@
 \usepackage[german]{babel}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
+\usepackage{hyperref}
+\usepackage[doublespacing]{setspace}
+\usepackage{geometry}
+  \geometry{
+    a4paper,
+    right=30mm,
+    left=30mm
+  }
+
+\title{Vorhersage von Ausfallwahrscheinlichkeiten mit neuronalen Netzen}
+\author{Thomas Siskos}
+\date{ }
 
 \begin{document}
+\begin{titlepage}
+  \begin{center}
+
+  \includegraphics[scale=1.25]{hulogo.pdf} \par
+  {\scshape\LARGE Humboldt Universit{\"a}t zu Berlin \par}
+
+  {\scshape\Large Hausarbeit\par}
+
+  {\huge\bfseries Vorhersage von Ausfallwahrscheinlichkeiten mit neuronalen Netzen\par}
+
+\vspace{1cm}
+
+  {\Large\itshape Thomas Siskos (580726)\par}
+
+  {\Large\scshape Datenanalyse II\par}
+
+  \vfill
+  Dozent: \par
+  {\Large Dr. Sigmund~\scshape Klinke \par}
+  \vfill
+  {\large \today\par}
+  \end{center}
+\end{titlepage}
+
+\tableofcontents
+\listoftables
+\listoffigures
+\newpage
 \section{Einleitung}
 
-\section{Daten}
-\subsection{Die Creditreform Datenbank}
-\subsubsection{Datenaufbereitung}
+Die Ausfallwahrscheinlichkeit ist ein Begriff der Finanzen und beschreibt die Wahrscheinlichkeit, dass ein Kreditnehmer, innerhalb eines Zeitrahmens, nicht in der Lage sein wird seine Verpflichtungen zum vorher festgelegten Termin einzuhalten. Die m{\"o}glichst genaue Sch{\"a}tzung und Vorhersage eines solchen Ausfalls ist von entscheidender Bedeutung. Die Bepreisung von Verm{\"o}genswerten, das Einsch{\"a}tzen der Risiken von Krediten und Kreditportfolios sowie die Wertsch{\"a}tzung anderer Finanz-Produkte h{\"a}ngen ma{\ss}geblich von der Pr{\"a}zision der gesch{\"a}tzten Ausfallwahrscheinlichkeiten ab (Miao et al., 2008). Es gibt zwei wesentliche Denkschulen bei der Analyse von Kreditausf{\"a}llen, der markt-basierte und der statistische Ansatz. Die markt-basierte Art modelliert Kreditausf{\"a}lle mithilfe struktureller Modelle, wohingegen der statistische Ansatz empirische Methoden bem{\"u}ht, historische Daten auszuwerten. Diese Daten k{\"o}nnen beispielsweise aus der Buchhaltung, beziehungsweise aus den Bilanzen von Unternehmen gewonnen werden (H{\"a}rdle et al., 2012).
+
+Zur Quantifizierung der Ausfallwahrscheinlichkeit werden in der Literatur oft Kennzahlen verwendet, die vornehmlich eine oder mehrere Bilanzpositionen gegen eine oder mehrere andere ins Verh{\"a}ltnis setzen. Diese Kennzahlen haben sich in vergangenen Studien oft als hilfreich erwiesen (Altman, 1968). In dieser Arbeit werden wir die 28 finanziellen Kennzahlen bestimmen, die von Zhang und H{\"a}rdle (2010) verwendet wurden. Wir werden mithilfe dieses transformierten, des untransformierten sowie eines zusammengetzten Datensatzes neuronale Netze unterschiedlicher Architekturen trainieren und miteinander vergleichen. Insbesondere verwenden wir klassische neuronale Netze mit einer versteckten Schicht, Netze mit zwei versteckten Schichten und Netze mit f{\"u}nf versteckten Schichten. Die verschiedenen Architekturen wurden mithilfe der Programmiersprache \texttt{Python}, genauer mit dem Modul \texttt{tensorflow}, erzeugt. Der Quellcode f{\"u}r die neuronalen Netze ist auf \href{https://github.com/thsis/DAII}{github.com/thsis/DAII} einsehbar.
+
+Der folgende Abschnitt beschreibt den Datensatz der Creditreform Datenbank, sowie die Art und Weise wie die Daten bereinigt und transformiert wurden um die 28 Finanz-Kennzahlen zu bestimmen. Abschnitt 3 erl{\"a}utert die Theorie und Anwendung neuronaler Netze auf die transformierten und untransformierten Daten. Der letzte Abschnitt enth{\"a}lt eine abschlie{\ss}ende Zusammenfassung und kritische W{\"u}rdigung der Ergebnisse.
+
+
+\begin{center}
+\begin{table}
+\centering
+\label{creditVars}
+\begin{tabular}{cc}
+\hline\hline
+Variable & Bedeutung\\
+\hline
+ID & Kennnummer jedes Unternehmens\\
+T2 & Solvenz-Status (solvent:0, insolvent:1)\\
+JAHR & Jahr\\
+VAR1 & Scheck, Kassenbestand\\
+VAR2 & Vorr{\"a}te - Gesamt\\
+VAR3 & Umlaufverm{\"o}gen\\
+VAR4 & Sachanlagen - Gesamt\\
+VAR5 & Immaterielle Verm{\"o}gensbest{\"a}nde\\
+VAR6 & Gesamtverm{\"o}gen\\
+VAR7 & Forderungen aus Lieferung und Leistung\\
+VAR29 & Forderungen gg{\"u}. Unternehmen mit Beteiligungsverh{\"a}ltnis\\
+VAR8 & Grundst{\"u}cke und Bauten\\
+VAR9 & Eigenkapital\\
+VAR10 & Gesellschafterdarlehen\\
+VAR11 & Pesionsr{\"u}ckstellungen \\
+VAR12 & kurzfristige Verbindlichkeiten - Gesamt\\
+VAR13 & langfristige Verbindlichkeiten - Gesamt\\
+VAR14 & Bankschulden\\
+VAR15 & Verbindlichkeiten aus Lieferung und Leistung\\
+VAR30 & Verbindlichkeitern gg{\"u}. Unternehmen mit Beteiligungsverh{\"a}ltnis\\
+VAR16 & Ums{\"a}tze\\
+VAR17 & Vertriebs- / Verwaltungsaufwand\\
+VAR18 & Abschreibungen\\
+VAR19 & Zinsaufwendungen\\
+VAR20 & Gewinn vor Zins und Steuern (EBIT)\\
+VAR21 & Betriebsgewinn \\
+VAR22 & Jahres{\"u}berschuss \\
+VAR23 & (Lager-) Bestandsver{\"a}nderungen \\
+VAR24 & Ver{\"a}nderungen der Verbindlichkeiten gg{\"u}. Vorjahr\\
+VAR25 & Ver{\"a}nderungen Bargeld/Kassenbestand/fl{\"u}ssige Mittel\\
+VAR26 & Branchenzugeh{\"o}rigkeit\\
+VAR27 & Rechtsform\\
+VAR28 & Anzahl Mitarbeiter\\
+\hline\hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{Die Creditreform Datenbank}
+
+Die Creditreform Datenbank enth{\"a}lt Daten f{\"u}r 20.000 solvente und 1.000 insolvente deutsche Firmen aus den Jahren 1997 bis 2007. Der Datensatz wurde durch das Labor f{\"u}r empirische und quantitative Forschung (\href{https://leqr.wiwi.hu-berlin.de/leqr/content/databaseInformation/creditreform/creditreform.htm}{LEQR}) der Humboldt Universit{\"a}t zu Berlin bereitgestellt. Die enthaltenen Variablen stammen aus den Bilanzen der Unternehmen und stellen f{\"u}r potentielle Investoren die Hauptgrundlage f{\"u}r Analysen dar. Ein Unternehmen wird entweder mit sich selbst verglichen, indem der zeitliche Verlauf der Bilanzposten untersucht wird oder das Unternehmen wird mit {\"a}hnlichen Firmen verglichen indem eine Auswahl finanzieller Kennzahlen betrachtet wird (Berk \& DeMarzo, 2016).
+
+Rund die H{\"a}lfte der Daten stammt aus den Jahren 2001 und 2002. Da 1996 keine insolventen Unternehmen vorliegen, werden alle Beobachtungen dieses Jahres gel{\"o}scht. Der Gro{\ss}teil der verbleibenden Unternehmen ist entweder im Baugewerbe, im Handel, in der Industrue oder im Immobilienwesen t{\"a}tig. Andere Kategorien umfassen beispielsweise Branchen wie Landwirtschaft und Bergbau, Elektrizit{\"a}t-, Gas- und Wasserversorgung, die Gastronomie, Logistik und soziale Dienstleistungen. Alle Unternehmen die zu diesen Kategorien geh{\"o}ren werden von der folgenden Analyse ausgeschlossen, um die Schichtung des Trainingsdatensatzes nicht unn{\"o}tig zu komplizieren. Au{\ss}erdem werden sowohl die kleinsten, als auch die gr{\"o}{\ss}ten Unternehmen entfernt. Betrachtet werden nur Unternehmen, deren Gesamtverm{\"o}gen zwischen 10.000€ und 10.000.000€ liegen. Die kleinsten Unternehmen werden entfernt, da deren finanzielle Lage oft von den Finanzen einer einzelnen verantwortlichen Person, typischerweise die Eigent{\"u}merin oder der Eigent{\"u}mer, abh{\"a}ngt. Die gr{\"o}{\ss}ten Unternehmen werden hingegen entfernt, da sie in Deutschland nur in den allerseltensten F{\"a}llen Gefahr laufen in die Zahlungsunf{\"a}higkeit zu geraten. Des Weiteren werden Unternehmen entfernt, bei denen w{\"a}hrend der Berechnung der finanziellen Kennzahlen Nullen im Nenner auftreten (Chen, 2010).
+
+\begin{table}
+\begin{center}
+\centering
+\caption{Definitionen der finanziellen Kennzahlen}
+\scriptsize
+\vspace{1mm}
+\begin{tabular}{ccc}
+\hline\hline
+Name & Formel & Kennzahl \\
+\hline
+x1 & VAR22/VAR6 & Gesamtkapitalrentabilit{\"a}t (ROA) \\
+x2 & VAR22/VAR16 & Nettogewinnmarge \\
+x3 & VAR21/VAR6 & \\
+x4 & VAR21/VAR16 & Betriebsgewinnmarge \\
+x5 & VAR20/VAR6 & \\
+x6 & (VAR20+VAR18)/VAR6 & EBITDA \\
+x7 & VAR20/VAR16 & \\
+x8 & VAR9/VAR6 & Eigenmittelquote (einfach)\\
+x9 & (VAR9-VAR5)/(VAR6-VAR5-VAR1-VAR8) & Eigenmittelquote (angepasst) \\
+x10 & VAR12/VAR6 & \\
+x11 & (VAR12-VAR1)/VAR6 & Nettoverschuldung \\
+x12 & (VAR12+VAR13)/VAR6 & \\
+x13 & VAR14/VAR6 & Schuldenquote \\
+x14 & VAR20/VAR19 & Zinsdeckungsgrad \\
+x15 & VAR1/VAR6 & \\
+x16 & VAR1/VAR12 & Liquidit{\"a}tsgrad \\
+x17 & (VAR3-VAR2)/VAR12 & Quick Ratio \\
+x18 & VAR3/VAR12 & Current Ratio \\
+x19 & (VAR3-VAR12)/VAR6 & \\
+x20 & VAR12/(VAR12+VAR13) & \\
+x21 & VAR6/VAR16 & Kapitalumschlag \\
+x22 & VAR2/VAR16 & Lagerumschlag \\
+x23 & VAR7/VAR16 & Forderungsumschlag \\
+x24 & VAR15/VAR16 & Verbindlichkeitenumschlag \\
+x25 & log(VAR6) & Proxy f{\"u}r die Unternehmensgr{\"o}{\ss}e \\
+x26 & VAR23/VAR2 & Gestaffelte Prozentuale Lagerbestands{\"a}nderung \\
+x27 & VAR24/(VAR12+VAR13) & Gestaffelte Prozentuale Forderungs{\"a}nderung \\
+x28 & VAR25/VAR1 & Gestaffelte Prozentuale {\"a}nderung des Cash Flow \\
+\hline\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+Die verbleibenden Unternehmen gliedern sich in verschiedene Sektoren, von denen die vier h{\"a}ufigsten im Folgenden analysiert werden. Von den 9567 solventen Unternehmen sind 35,9\% in der Industrie, 34,1\% im Handel, 19,5\% im Baugewerbe und 10,4\% in der Immobilienbranche t{\"a}tig. Von den 782 insolventen Unternehmen sind 45,0\% im Baugewerbe, 28,2\% in der Industrie, 21,6\% im Handel und 5,1\% in der Immobilienbranche t{\"a}tig.
+
+Anschlie{\ss}end werden mithilfe der verbleibenden Unternehmen die finanziellen Kennzahlen ermittelt. Die Variablen \texttt{x1}-\texttt{x7} geh{\"o}ren zu den sogenannten Rentabilit{\"a}tsverh{\"a}ltnissen. Rentabilit{\"a}tsverh{\"a}ltnisse haben sich in der Vergangenheit als besonders starke Pr{\"a}diktoren f{\"u}r Kreditausf{\"a}lle erwiesen. Zum Beispiel gew{\"a}hrt die Gesamtkapitalrentabilit{\"a}t (return on assets, ROA) \texttt{x1} einen Einblick in die Umsatzst{\"a}rke eines Unternehmens im Vergleich zu dessen Kosten. So signalisiert ein h{\"o}herer Wert der Kennzahl, dass ein Unternehmen in der Lage ist mehr Geld mit weniger Mitteln zu verdienen. Die Nettogewinnmarge \texttt{x2} hingegen veranschaulicht den Anteil des Umsatzes, den das Unternehmen als Einnahmen einbeh{\"a}lt. Ein hoher Wert geht mit einem profitablen Unternehmen einher, das seine Kosten zu kontrollieren versteht (Chen et al., 2011).
+
+Eine weitere Reihe der Kennzahlen beschreibt die sogenannte Hebelwirkung. Damit ist das Ausma{\ss} gemeint, in dem ein Unternehmen auf Schulden als Finanzierungsquelle angewiesen ist (Berk \& DeMarzo, 2016). Da Unternehmen Schulden und Eigenkapital kombinieren, um ihre Aktivit{\"a}ten zu finanzieren, erweisen sich Kennzahlen {\"u}ber ebenjene Hebelwirkung als hilfreiche Werkzeuge um die Zahlungsf{\"a}higkeit eines Unternehmens einzusch{\"a}tzen. Zu den Kennzahlen der Hebelfinanzierung geh{\"o}ren die Variablen \texttt{x8}-\texttt{x14}. Beispielsweise misst die Nettoverschuldung \texttt{x11} die H{\"o}he der kurzfristigen Verpflichtungen, welche nicht durch die liquidesten Verm{\"o}gensbest{\"a}nde gedeckt sind, als prozentualer Anteil des Gesamtverm{\"o}gens. Somit misst diese Kennzahl auch die kurzfristige Liquidit{\"a}t eines Unternehmens (Chen et al., 2011).
+
+Die sechs Folgenden Verh{\"a}ltnisse \texttt{x15}-\texttt{x20} geh{\"o}ren in den Bereich der Liquidit{\"a}ts-Kennzahlen. Liquidit{\"a}t ist eine weit verbreitete Variable, die in vielen Kreditentscheidungen eine wichtige Rolle spielt. Liquidit{\"a}t beschreibt die M{\"o}glichkeiten eines Unternehmens Verm{\"o}gensbest{\"a}nde in kurzer Zeit in Bargeld umzuwandeln. Die wohl wichtigste Kennzahl f{\"u}r die Liquidit{\"a}t ist der Anteil der Kassenbest{\"a}nde am Gesamtverm{\"o}gen \texttt{x15}. Ein weiterer wichtiger Gradmesser f{\"u}r die Liquidit{\"a}t eines Unternehmens ist der sogenannte Quick-Ratio \texttt{x17}. Mithilfe des Quick-Ratio versucht man einzusch{\"a}tzen, ob ein Unternehmen {\"u}ber ausreichend liquide Mittel verf{\"u}gt um insbesondere kurzfristige Zahlungen zu decken. Ein hoher Quick-Ratio indiziert, dass es f{\"u}r das Unternehmen unwahrscheinlich ist, kurzfristig in Zahlungsnot zu geraten (Berk \& DeMarzo, 2016).
+
+Einen weitereren wichtigen Typus von betriebswirtschaftlichen Kennzahlen stellen die Aktivit{\"a}tskennzahlen \texttt{x21}-\texttt{x24} dar. Aktivit{\"a}tskennzahlen messen die Effizienz mit der ein Unternehmen eigene Ressourcen aufwendet, um Umsatz mithilfe seiner Verm{\"o}gensbest{\"a}nde zu generieren (Chen et al., 2011).
+
+Zus{\"a}tzlich berechnen wir den Logarithmus des Gesamtverm{\"o}gens \texttt{x25}. Dieser Risikoindikator stellt die Gr{\"o}{\ss}e eines Unternehmens dar und versetzt uns in die Lage gro{\ss}e, mittlere und kleine Unternehmen miteinander in Beziehung zu setzen. Als letzte Gruppe betriebswirtschaftlicher Kennzahlen berechnen wir die gestaffelten prozentualen {\"a}nderungen des Cash-Flow, des Lagerbestandes und der Forderungen im Vergleich zum Vorjahr \texttt{x26}-\texttt{x28}. (Chen et al., 2011).
+
+Um Einfl{\"u}sse von Ausrei{\ss}ern auf die neuronalen Netze zu eliminieren, werden extreme Werte f{\"u}r die verschiedenen Verh{\"a}ltnisse durch das 0.05- bzw. das 0.95-Quantil ersetzt. Pr{\"a}ziser ausgedr{\"u}ckt, folgen wir der Regel, wenn $x_{ij} < q_{0.05}(x_j)$, dann setze $x_{ij} \stackrel{!}{=} q_{0.05}(x_j)$. Beziehungsweise, wenn $x_{ij} > q_{0.95}(x_j)$, dann setze $x_{ij} \stackrel{!}{=} q_{0.95}(x_j)$. Wobei $x_i, i \in \{1, \vdots, N\}$ f{\"u}r jeden einzelnen Wert einer Kennzahl $x_j$ und $q_k(x_j), j \in \{1, \vdots, 28\}, k=0.05, 0.95$ f{\"u}r die jeweiligen Quantile der Kennzahl $x_j$ des Datensatzes steht.
 
 \section{Methoden}
 \subsection{Neuronale Netze}
@@ -23,7 +177,7 @@
     minimum size=1cm},
   neuron missing/.style={
     draw=none,
-    scale=4,
+    scale=3,
     text height=0.333cm,
     execute at begin node=\color{black}$\vdots$},
 }
@@ -52,8 +206,8 @@
     node [above, midway] {$O_\i$};
 
 \foreach \l [count=\i] in {1, 10}
-  \node [above] at (hidden-\i.north) {$H_\l$};
-  
+  \node [above] at (hidden-\i.north) {$H^{(1)}_{\l}$};
+
 \foreach \i in {1, 2, 3}
   \foreach \j in {1,2}
     \draw [->] (input-\i) -- (hidden-\j);
@@ -94,10 +248,10 @@
     node [above, midway] {$O_\i$};
 
 \foreach \l [count=\i] in {1, 10}
-  \node [above] at (hidden1-\i.north) {$H_{1\l}$};
+  \node [above] at (hidden1-\i.north) {$H^{(1)}_{\l}$};
 
 \foreach \l [count=\i] in {1, 10}
-  \node [above] at (hidden2-\i.north) {$H_{2\l}$};
+  \node [above] at (hidden2-\i.north) {$H^{(2)}_{\l}$};
 
 \foreach \i in {1, 2}
   \foreach \j in {1,2}
@@ -105,7 +259,7 @@
 
 \foreach \i in {1, 2}
   \draw [->] (hidden2-\i) -- (output-1);
-  
+
 \foreach \i in {1, 2, 3}
   \foreach \j in {1,2}
     \draw [->] (input-\i) -- (hidden1-\j);
@@ -118,7 +272,7 @@
 
 \begin{figure}
 \centering
-\caption{Neuronales Netz mit fünf versteckten Schichten.}
+\caption{Neuronales Netz mit f{\"u}nf versteckten Schichten.}
 \vspace{2mm}
 \begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
 % input
@@ -155,7 +309,7 @@
 % names of hidden units
 \foreach \j in {1, 2, 3, 4, 5}
   \foreach \l [count=\i] in {1, 10}
-    \node [above] at (hidden\j-\i.north) {$H_{\j\l}$};
+    \node [above] at (hidden\j-\i.north) {$H^{(\j)}_{\l}$};
 
 % edges between hidden units
 \foreach \i in {1, 2}
@@ -165,7 +319,7 @@
 \foreach \i in {1, 2}
   \foreach \j in {1,2}
     \draw [->] (hidden2-\i) -- (hidden3-\j);
-    
+
 \foreach \i in {1, 2}
   \foreach \j in {1,2}
     \draw [->] (hidden3-\i) -- (hidden4-\j);
@@ -177,7 +331,7 @@
 % last edge from 5th hidden layer to output
 \foreach \i in {1, 2}
   \draw [->] (hidden5-\i) -- (output-1);
-  
+
 \foreach \i in {1, 2, 3}
   \foreach \j in {1,2}
     \draw [->] (input-\i) -- (hidden1-\j);

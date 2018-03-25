@@ -65,3 +65,10 @@ test = ann.NN2L(data=X_data.values, labels=outcomes, structure=(28, 10, 10))
 test.train(1000, 0.5, 'tests/test_NN2L')
 test.predict(data=X_data.values, labels=outcomes)
 outcomes
+
+
+test5L = ann.NN5L(data=X_data.values,
+                  labels=outcomes,
+                  structure=(28, 70, 77, 70, 7, 7))
+test5L.train(10000, 0.03, 'tests/test_NN5L')
+test5L.predict(data=X_data.values, labels=outcomes)

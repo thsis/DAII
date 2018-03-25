@@ -8,6 +8,7 @@ Parameters are:
     - units : units for hidden layer
     - learn : learn rate
     - epochs: number of training epochs
+    - structure: tuple specifying the size of each layer (input, hidden1, ...)
 """
 import tensorflow as tf
 from tqdm import tqdm

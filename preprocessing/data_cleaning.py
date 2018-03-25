@@ -23,7 +23,7 @@ credit = pd.read_csv(data_path,
 credit[['VAR26']] = credit[['VAR26']].astype(str)
 
 # Filter by year (i.e. take observations from 1996 to 2002).
-credit = credit[(credit['JAHR'] >= 1996) & (credit['JAHR'] <= 2002)]
+credit = credit[(credit['JAHR'] > 1996) & (credit['JAHR'] <= 2002)]
 
 # Filter by asset size (VAR6).
 credit = credit[(credit['VAR6'] >= 10 ** 5) & (credit['VAR6'] <= 10 ** 8)]
@@ -61,12 +61,14 @@ add_category('manufacturing', range(15, 37))
 # Match category id with industry class from WZ 93 by 2 digits and store it.
 credit['category'] = credit[['VAR26']].apply(lambda l: [ind[s[:2]] for s in l])
 
+# Remove 'other' category.
+credit = credit[credit['category'] != 'other']
+
 # Print summary
 ind_cat = credit.groupby(['T2']).category.value_counts(normalize=True)
 print(ind_cat)
+print(credit.groupby(['T2'])['ID'].nunique())
 
-# Remove 'other' category.
-credit = credit[credit['category'] != 'other']
 
 # Write to csv.
 data_out = os.path.join('data', 'credit_clean.csv')

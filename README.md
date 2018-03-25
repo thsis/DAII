@@ -22,6 +22,8 @@
 3. Implement feed-forward-neural-network.
     - __NN1L__ [defined here](https://github.com/thsis/DAII/blob/master/models/ann.py): function class for neural net with one hidden layer.
     - __NN2L__ [defined here](https://github.com/thsis/DAII/blob/master/models/ann.py): function class
-    for neual net with two hidden layers.
+    for neural net with two hidden layers.
+    - __NN5L__ [defined here](https://github.com/thsis/DAII/blob/master/models/ann.py): function class
+    for neural net with five hidden layers (which for most applications is probably overkill).
 
 4. Perform grid-search.
