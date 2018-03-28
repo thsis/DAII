@@ -12,6 +12,8 @@
     left=30mm
   }
 
+\usepackage{amsmath}
+
 \title{Vorhersage von Ausfallwahrscheinlichkeiten mit neuronalen Netzen}
 \author{Thomas Siskos}
 \date{ }
@@ -167,8 +169,26 @@ Um Einfl{\"u}sse von Ausrei{\ss}ern auf die neuronalen Netze zu eliminieren, wer
 
 \section{Methoden}
 \subsection{Neuronale Netze}
-\subsection{Theorie}
-\subsection{Architekturen und Hyperparameter}
+
+K{\"u}nstliche neuronale Netze versuchen die Struktur von Gehirnen nachzubilden. Stark vereinfacht enth{\"a}lt ein jedes Gehirn sogenannte Neuronen, welche {\"u}ber zwei Zust{\"a}nde verf{\"u}gen k{\"o}nnen. Ein Neuron ist entweder aktiviert oder nicht. In einem Gehirn ver{\"a}ndern Neuronen ihren Zustand als Reaktion auf einen chemischen oder elektrischen Stimulus. Das Netz, das die Neuronen innerhalb des Gehirns eines Menschen bilden ist ein enormes Gespinst, in dem der Zustand eines Neurons das Ergebnis tausender anderer Neuronen sein kann. F{\"u}hrt ein Stimulus dazu, dass bestimmte Verbindungen wiederholt aktiviert werden, verfestigt sich deren Verbindung. Das f{\"u}hrt dazu, dass bei einem {\"a}hnlichen Stimulus ebenfalls dieselben Verbindungen aktiviert werden und zu demselben Outputzustand f{\"u}hren. Dieses Verhalten nennen wir Lernen.
+
+K{\"u}nstliche neuronale Netze vereinfachen die Vorg{\"a}nge des Gehirns stark. Ein k{\"u}nstliches Neuron wird durch eine Aktivierungsfunktion simuliert, deren Bildmenge das Verhalten eines Schalters emuliert. Wir verlangen von der Aktivierungsfunktion, dass sie {\"u}ber mindestens zwei deutlich verschiedene Zust{\"a}nde verf{\"u}gt. Typischerweise ist der Output einer Aktivierungsfunktion zum Beispiel entweder Null oder Eins, Null oder gr{\"o}{\ss}er Null, Minus Eins oder Eins oder eine sigmoidale Funktion, welche auf dem Intervall $ \left[0, 1\right] $ beschr{\"a}nkt ist. Die Aktivierungsfunktion die in der folgenden Analyse verwendet wird besitzt die Form
+
+\begin{equation}
+\label{sigmoid}
+\phi (z) = \frac{1}{1 + \exp (-z)}.
+\end{equation}
+
+Wie bereits erl{\"a}utert wurde, sind biologische Neuronen Teil eines hierarchischen Netzwerkes, in dem das Signal von manchen in andere Neuronen eingespeist wird. Im Allgemeinen wird diese Struktur durch miteinander verbundene \textit{Knoten} einer \textit{Schicht} repr{\"a}sentiert. Ein Netzwerk besteht aus einer Input, ein oder mehrerer versteckter Schichten und einer Output-Schicht. Der Name der mittleren Schichten tr{\"a}gt der Tatsache Rechnung, dass das Wirken der versteckten Schichten zu einem gewissen Grad nur schwer zu beobachten, zuweilen sogar komplett unbeobachtbar ist. F{\"u}r gew{\"o}hnlich sieht der Benutzer eines neuronalen Netzes nur das, was eingespeist wird, sowie dessen Ergebnis. Innerhalb eines \textit{Knoten} wird die Aktivierungsfunktion des Neurons auf die gewichtete Summe aller Kanten des Graphen angewandt. Der Output $h^{k}_l$ eines \textit{Knoten} der ersten versteckten Schicht $H^{(1)}_l$ ist somit als
+
+\begin{equation}
+\label{nodeOut}
+\begin{split}
+h^{(k)}_l &= \phi(\beta_0 + x_1 \beta_1 + \dots + x_{28} \beta_{28}) \\
+        &= \frac{1}{1 + \exp (-\beta_0 - \beta_1 w_1 - \dots - \beta_{28}x_{28})}.
+\end{split}
+\end{equation}
+
 
 \tikzset{
   every neuron/.style={
@@ -220,6 +240,25 @@ Um Einfl{\"u}sse von Ausrei{\ss}ern auf die neuronalen Netze zu eliminieren, wer
   \node [align=center, above] at (\x*2,2) {\l \\ Schicht};
 \end{tikzpicture}
 \end{figure}
+
+Das Signal $o_1$ des Output-Knotens $O_1$ ist wiederum eine gewichtete Summe der Outputs der versteckten Schicht.
+
+\begin{equation}
+\label{outOut}
+o_1 = \phi \left(\sum_{q=0}^{u} \gamma_q h^{(1)}_q\right)
+\end{equation}
+
+Mithilfe dieser Gleichungen lassen sich die Inputs vorw{\"a}rts durch das Netzwerk propagieren, vorausgesetzt man kennt die Gewichte $\beta$ und $\gamma$.
+
+
+
+%#################################################################################################
+%########################################## CONTINUE ME ##########################################
+%#################################################################################################
+
+
+\subsection{Theorie}
+\subsection{Architekturen und Hyperparameter}
 
 
 \begin{figure}
