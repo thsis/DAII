@@ -59,6 +59,7 @@ Der folgende Abschnitt beschreibt den Datensatz der Creditreform Datenbank, sowi
 \begin{center}
 \begin{table}
 \centering
+\caption{Variablen des Creditreform Datensatzes}
 \label{creditVars}
 \begin{tabular}{cc}
 \hline\hline
@@ -248,18 +249,45 @@ Das Signal $o_1$ des Output-Knotens $O_1$ ist wiederum eine gewichtete Summe der
 o_1 = \phi \left(\sum_{q=0}^{u} \gamma_q h^{(1)}_q\right)
 \end{equation}
 
-Mithilfe dieser Gleichungen lassen sich die Inputs vorw{\"a}rts durch das Netzwerk propagieren, vorausgesetzt man kennt die Gewichte $\beta$ und $\gamma$.
+Mithilfe dieser Gleichungen lassen sich die Inputs vorw{\"a}rts durch das Netzwerk propagieren, vorausgesetzt man kennt die Gewichte $\beta$ und $\gamma$. Im Allgemeinen muss man die Gewichte zun{\"a}chst ermitteln. Dies geschieht durch die Optimierung einer Kostenfunktion. Im Falle bin{\"a}rer Zustandsvariablen bietet sich die Kreuzentropie an.
+
+\begin{equation}
+\label{crossEnt}
+J = - \frac{1}{n} \sum \left( y \log a + (1-y) \log(1-a) \right),
+\end{equation}
+
+wobei $a$ f{\"u}r die jeweilige Aktivierungsfunktion steht.
+
+Die Kreuzentropie aus Gleichung \ref{crossEnt} vereint zwei Eigenschaften, die sie als Kostenfunktion besonders auszeichnen. Sie ist gr{\"o}{\ss}er Null und wenn der Output $a$ des Endknotens nahe am tats{\"a}chlichen Zustand der Beobachtung liegt, ist der Wert des Summanden an dieser Stelle ebenfalls sehr gering. F{\"u}r die optimalen Gewichte gilt es, $J$ zu minimieren. Das Verfahren dazu nennt sich in der Literatur \textit{backpropagation} und ist eine Anwendung der Kettenregel des Ableitens.
+
+\begin{equation}
+\label{backProp}
+\begin{split}
+\frac{\partial J}{\partial \beta_j} &= - \frac{1}{n}\sum \left( \frac{y}{\sigma (z)} - \frac{1-y}{1-\sigma(z)}
+                                      \right) \frac{\partial \sigma}{\partial \beta_j} \\
+                                    &= - \frac{1}{n}\sum \left( \frac{y}{\sigma (z)} - \frac{1-y}{1-\sigma(z)}
+                                      \right) \sigma(z) \left( 1- \sigma(z) \right) x_j .
+\end{split}
+\end{equation}
+
+Wobei wir die sigmoidale Aktivierungsfunktion $\sigma(z)$ f{\"u}r $a$ in Gleichung \ref{crossEnt} eingesetzt haben. Gleichung \ref{backProp} l{\"a}sst sich weiter vereinfachen,
+\begin{equation}
+\label{backProp2}
+\begin{split}
+\frac{\partial J}{\partial \beta_j} &= \frac{1}{n} \sum \frac{\sigma(z) \left( 1- \sigma(z)\right) x_j}{\sigma(z) \left( 1- \sigma(z) \right)} \left( \sigma(z) - y \right) \\
+                                    &= \frac{1}{n} \sum x_j \left( \sigma(z) - y \right) \stackrel{!}{=} 0 .
+\end{split}
+\end{equation}
+
+Der Ausdruck in \ref{backProp2} besagt, dass die Rate mit der das Gewicht gelernt wird, von dem Fehler in $\left( \sigma(z) - y \right)$ abh{\"a}ngt. Je gr{\"o}{\ss}er dieser Fehler, desto schneller lernt das Neuron.
 
 
+
+\subsection{Architekturen und Hyperparameter}
 
 %#################################################################################################
 %########################################## CONTINUE ME ##########################################
-%#################################################################################################
-
-
-\subsection{Theorie}
-\subsection{Architekturen und Hyperparameter}
-
+%################################################################################################
 
 \begin{figure}
 \centering

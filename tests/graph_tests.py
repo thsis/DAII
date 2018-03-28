@@ -38,26 +38,13 @@ X = subset.loc[:, subset.columns != "T2"].values
 y = subset.loc[:, "T2"].values.reshape((1564, 1))
 
 nn1l = ann.NN1L(data=X, labels=y, units=10)
-nn1l.train(epochs=100, learn=0.5)
+nn1l.train(epochs=1000, learn=0.5)
 
-xx, yy, Z = graphs.setup_contours(subset, "x8", "x14", 1, nn1l)
-xx
-yy
-Z
-Z.shape
-plt.hist(Z)
-plt.show()
-Z = Z.reshape(xx.shape)
 
-X0 = subset['x8'].values
-X1 = subset['x14'].values
-col = subset['T2'].values
-
-plt.scatter(X0, X1, c=col, cmap=plt.cm.coolwarm, alpha=0.4)
-plt.contourf(xx, yy, Z, alpha=0.4, cmap=plt.cm.coolwarm)
-plt.show()
-
-graphs.plot_decision_boundary(subset, "x8", "x14", "T2", nn1l,
+graphs.plot_decision_boundary(subset, "x6", "x13", "T2", nn1l,
                               cmap=plt.cm.coolwarm, alpha=0.4)
 
 plt.show()
+
+# TRY:
+# x17 vs x18

@@ -48,8 +48,15 @@ def plot_decision_boundary(data, x, y, labels, model, **kwargs):
     col = data[labels].values
 
     plt.scatter(x0, x1, c=col, **kwargs)
-    plt.contourf(xx, yy, Z, **kwargs)
+    CS = plt.contourf(xx, yy, Z, **kwargs)
+    CS2 = plt.contour(CS, CS.levels[::2], **kwargs)
+    cbar = plt.colorbar(CS, **kwargs)
+    cbar.ax.set_ylabel('Fitted Probability')
+    # Add the contour line levels to the colorbar
+    cbar.add_lines(CS2)
+
     plt.xlim(x0lim)
     plt.ylim(x1lim)
     plt.xlabel(x)
     plt.ylabel(y)
+    plt.legend()

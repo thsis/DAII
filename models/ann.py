@@ -53,10 +53,6 @@ class NN1L(object):
 
             with tf.name_scope('summaries'):
                 tf.summary.scalar('cross_entropy', cost)
-                predictions = tf.nn.sigmoid(out)
-                auc, auc_op = tf.metrics.auc(labels=Y,
-                                             predictions=predictions)
-                tf.summary.scalar('auc_train', auc)
 
             with tf.name_scope('global_ops'):
                 init = tf.global_variables_initializer()
@@ -64,8 +60,6 @@ class NN1L(object):
 
         with tf.Session(graph=train_graph) as sess:
             init.run()
-            # initialize local vars for auc metric.
-            tf.initialize_local_variables().run()
             writer = tf.summary.FileWriter(logdir=logdir, graph=train_graph)
             for epoch in tqdm(range(epochs)):
                 c, log, w_1, w_o = sess.run(fetches=[train, merged, w1, wo],
@@ -76,7 +70,7 @@ class NN1L(object):
 
             self.w1, self.wo = w_1, w_o
 
-    def predict(self, data, labels):
+    def predict(self, data):
         val_graph = tf.Graph()
 
         with val_graph.as_default():
@@ -89,26 +83,18 @@ class NN1L(object):
                     X = tf.placeholder(shape=(None, self.cols),
                                        dtype=tf.float32,
                                        name='features')
-                    Y = tf.placeholder(shape=(None, 1),
-                                       dtype=tf.float32,
-                                       name='labels')
+
                 with tf.name_scope('forward_pass'):
                     h1 = tf.nn.sigmoid(tf.matmul(X, w1))
                     predictions = tf.nn.sigmoid(tf.matmul(h1, wo))
 
-                with tf.name_scope('summaries'):
-                    auc, _ = tf.metrics.auc(labels=Y,
-                                            predictions=predictions)
-
         with tf.Session(graph=val_graph) as sess:
             tf.global_variables_initializer().run()
-            tf.local_variables_initializer().run()
 
-            preds, auc = sess.run([predictions, auc],
-                                  feed_dict={X: data,
-                                             Y: labels})
+            preds = sess.run(predictions,
+                             feed_dict={X: data})
 
-        return preds, auc
+        return preds
 
 
 class NN2L(object):
@@ -155,10 +141,6 @@ class NN2L(object):
 
             with tf.name_scope('summaries'):
                 tf.summary.scalar('cross_entropy', cost)
-                predictions = tf.nn.sigmoid(out)
-                auc, auc_op = tf.metrics.auc(labels=Y,
-                                             predictions=predictions)
-                tf.summary.scalar('auc_train', auc)
 
             with tf.name_scope('global_ops'):
                 init = tf.global_variables_initializer()
@@ -166,8 +148,6 @@ class NN2L(object):
 
         with tf.Session(graph=train_graph) as sess:
             init.run()
-            # initialize local vars for auc metric.
-            tf.local_variables_initializer().run()
             writer = tf.summary.FileWriter(logdir=logdir, graph=train_graph)
             for epoch in tqdm(range(epochs)):
                 c, log, w_1, w_2, w_o = \
@@ -179,7 +159,7 @@ class NN2L(object):
 
             self.w1, self.w2, self.wo = w_1, w_2, w_o
 
-    def predict(self, data, labels):
+    def predict(self, data):
         val_graph = tf.Graph()
 
         with val_graph.as_default():
@@ -193,27 +173,18 @@ class NN2L(object):
                     X = tf.placeholder(shape=(None, self.inp),
                                        dtype=tf.float32,
                                        name='features')
-                    Y = tf.placeholder(shape=(None, 1),
-                                       dtype=tf.float32,
-                                       name='labels')
                 with tf.name_scope('forward_pass'):
                     h1 = tf.nn.sigmoid(tf.matmul(X, w1))
                     h2 = tf.nn.sigmoid(tf.matmul(h1, w2))
                     predictions = tf.nn.sigmoid(tf.matmul(h2, wo))
 
-                with tf.name_scope('summaries'):
-                    auc, _ = tf.metrics.auc(labels=Y,
-                                            predictions=predictions)
-
         with tf.Session(graph=val_graph) as sess:
             tf.global_variables_initializer().run()
-            tf.local_variables_initializer().run()
 
-            preds, auc = sess.run([predictions, auc],
-                                  feed_dict={X: data,
-                                             Y: labels})
+            preds = sess.run(predictions,
+                             feed_dict={X: data})
 
-        return preds, auc
+        return preds
 
 
 class NN5L(object):
@@ -275,10 +246,6 @@ class NN5L(object):
 
             with tf.name_scope('summaries'):
                 tf.summary.scalar('cross_entropy', cost)
-                predictions = tf.nn.sigmoid(out)
-                auc, auc_op = tf.metrics.auc(labels=Y,
-                                             predictions=predictions)
-                tf.summary.scalar('auc_train', auc)
 
             with tf.name_scope('global_ops'):
                 init = tf.global_variables_initializer()
@@ -286,8 +253,6 @@ class NN5L(object):
 
         with tf.Session(graph=train_graph) as sess:
             init.run()
-            # initialize local vars for auc metric.
-            tf.local_variables_initializer().run()
             writer = tf.summary.FileWriter(logdir=logdir, graph=train_graph)
             for epoch in tqdm(range(epochs)):
                 c, log, w_1, w_2, w_3, w_4, w_5, w_o = \
@@ -300,7 +265,7 @@ class NN5L(object):
             self.w1, self.w2, self.w3, self.w4, self.w5, self.wo =\
                 w_1, w_2, w_3, w_4, w_5, w_o
 
-    def predict(self, data, labels):
+    def predict(self, data):
         val_graph = tf.Graph()
 
         with val_graph.as_default():
@@ -317,9 +282,6 @@ class NN5L(object):
                     X = tf.placeholder(shape=(None, self.inp),
                                        dtype=tf.float32,
                                        name='features')
-                    Y = tf.placeholder(shape=(None, 1),
-                                       dtype=tf.float32,
-                                       name='labels')
                 with tf.name_scope('forward_pass'):
                     h1 = tf.nn.sigmoid(tf.matmul(X, w1))
                     h2 = tf.nn.sigmoid(tf.matmul(h1, w2))
@@ -328,16 +290,11 @@ class NN5L(object):
                     h5 = tf.nn.sigmoid(tf.matmul(h4, w5))
                     predictions = tf.nn.sigmoid(tf.matmul(h5, wo))
 
-                with tf.name_scope('summaries'):
-                    auc, _ = tf.metrics.auc(labels=Y,
-                                            predictions=predictions)
-
         with tf.Session(graph=val_graph) as sess:
             tf.global_variables_initializer().run()
             tf.local_variables_initializer().run()
 
-            preds, auc = sess.run([predictions, auc],
-                                  feed_dict={X: data,
-                                             Y: labels})
+            preds = sess.run(predictions,
+                             feed_dict={X: data})
 
-        return preds, auc
+        return preds
