@@ -46,6 +46,7 @@ def plot_decision_boundary(data, x, y, labels, model, **kwargs):
     x1lim = x1.min(), x1.max()
 
     col = data[labels].values
+    plt.figure(figsize=(4, 4))
 
     plt.scatter(x0, x1, c=col, **kwargs)
     CS = plt.contourf(xx, yy, Z, **kwargs)
