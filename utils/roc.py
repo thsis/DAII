@@ -5,13 +5,9 @@ Compare with:
 http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
 """
 
-import numpy as np
+
 from sklearn import metrics
 from matplotlib import pyplot as plt
-
-
-fake_preds = np.random.uniform(size=(100, 3))
-fake_labels = (fake_preds[:, 2] + np.random.uniform(0, 0.5, 100)).round()
 
 
 def roc(preds, labels, names=None):
@@ -32,6 +28,11 @@ def roc(preds, labels, names=None):
     fpr = dict()
     tpr = dict()
     auc = dict()
+
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(111)
+    ax.plot([0, 1], [0, 1], linestyle='--')
+
     for i in range(m):
         fpr[i], tpr[i], _ = metrics.roc_curve(labels, preds[:, i])
         auc[i] = metrics.auc(fpr[i], tpr[i])
@@ -39,7 +40,6 @@ def roc(preds, labels, names=None):
                  label='model {name}, AUC={auc:.2}'.format(name=names[i],
                                                            auc=auc[i]), lw=2)
 
-    plt.plot([0, 1], [0, 1], linestyle='--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.0])
     plt.xlabel("False Positive Rate")

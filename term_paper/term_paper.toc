@@ -4,5 +4,5 @@
 \contentsline {section}{\numberline {3}Methoden}{7}{section.3}
 \contentsline {subsection}{\numberline {3.1}Neuronale Netze}{7}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Architekturen und Hyperparameter}{9}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Ergebnisse}{9}{subsection.3.3}
-\contentsline {section}{\numberline {4}Zusammenfassung}{9}{section.4}
+\contentsline {subsection}{\numberline {3.3}Ergebnisse}{12}{subsection.3.3}
+\contentsline {section}{\numberline {4}Zusammenfassung}{12}{section.4}

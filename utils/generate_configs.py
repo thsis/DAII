@@ -2,9 +2,9 @@
 import os
 import json
 
-learn = [0.5, 0.01]
+learn = [0.005, 0.01]
 nodes = [1, 10, 20]
-epochs = [1000, 10000]
+epochs = [10000, 100000]
 architectures = ["nn1l", "nn2l", "nn5l"]
 
 i = 0

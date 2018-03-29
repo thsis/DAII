@@ -5,10 +5,9 @@ Compare with code on:
 https://github.com/nlintz/TensorFlow-Tutorials/blob/master/03_net.py
 
 Parameters are:
-    - units : units for hidden layer
     - learn : learn rate
     - epochs: number of training epochs
-    - structure: tuple specifying the size of each layer (input, hidden1, ...)
+    - units: tuple specifying the size of each layer (input, hidden1, ...)
 """
 import tensorflow as tf
 from tqdm import tqdm
@@ -98,8 +97,8 @@ class NN1L(object):
 
 
 class NN2L(object):
-    def __init__(self, data, labels, structure):
-        self.inp, self.h1, self.h2 = structure
+    def __init__(self, data, labels, units):
+        self.inp, self.h1, self.h2 = units
         self.data = data
         self.labels = labels
 
@@ -188,8 +187,8 @@ class NN2L(object):
 
 
 class NN5L(object):
-    def __init__(self, data, labels, structure):
-        self.inp, self.h1, self.h2, self.h3, self.h4, self.h5 = structure
+    def __init__(self, data, labels, units):
+        self.inp, self.h1, self.h2, self.h3, self.h4, self.h5 = units
         self.data = data
         self.labels = labels
 

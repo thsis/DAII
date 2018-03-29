@@ -14,7 +14,7 @@
 
 \usepackage{amsmath}
 
-\title{Vorhersage von Ausfallwahrscheinlichkeiten mit neuronalen Netzen}
+\title{Vorhersage von Kredit-Ausfallwahrscheinlichkeiten mit neuronalen Netzen}
 \author{Thomas Siskos}
 \date{ }
 
@@ -27,7 +27,7 @@
 
   {\scshape\Large Hausarbeit\par}
 
-  {\huge\bfseries Vorhersage von Ausfallwahrscheinlichkeiten mit neuronalen Netzen\par}
+  {\huge\bfseries Vorhersage von Kredit-Ausfallwahrscheinlichkeiten mit neuronalen Netzen\par}
 
 \vspace{1cm}
 
@@ -206,6 +206,7 @@ h^{(k)}_l &= \phi(\beta_0 + x_1 \beta_1 + \dots + x_{28} \beta_{28}) \\
 \begin{figure}
 \centering
 \caption{Neuronales Netz mit einer versteckten Schicht.}
+\label{NN1L}
 \vspace{2mm}
 \begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
 % plot input layer
@@ -285,13 +286,33 @@ Der Ausdruck in \ref{backProp2} besagt, dass die Rate mit der das Gewicht gelern
 
 \subsection{Architekturen und Hyperparameter}
 
-%#################################################################################################
-%########################################## CONTINUE ME ##########################################
-%################################################################################################
+Im Folgenden stellen wir kurz den Aufbau der verwendeten neuronalen Netze vor. Es wurden drei verschiedene Architekturen implementiert, die erste enthält genau eine versteckte Schicht, genau wie in Abbildung \ref{NN1L}. Die zweite Art Netz, dargestellt in Abbildung \ref{NN2L}, enthält zwei versteckte Schichten und die dritte Architektur, dargestellt in Abbildung \ref{fiveLayers}, beherbergt fünf versteckte Schichten. Bei allen neuronalen Netzwerken handelt es sich um sogenannte \textit{feed-forward-networks}. Das bedeutet, dass die beobachteten Daten von links nach rechts durch das Netzwerk propagiert werden. Alle Neuronen sind vollständig miteinander verbunden. Falls mehrere Schichten vorhanden sind, sind diese jeweils symmetrisch aufgebaut, das heißt alle versteckten Schichten enthalten jeweils dieselbe Anzahl an Neuronen.
+
+Es werden drei Hyperparameter verwendet. Der markanteste ist sicherlich die Anzahl an Neuronen, da davon die gesamte Struktur der jeweiligen neuronalen Netze abhängt. Für alle drei Architekturen wird zuerst ein Netz trainiert, das jeweils ein Neuron pro versteckter Schicht enthält, anschließend werden Netze trainiert deren Schichten zehn Neuronen enthalten und abschließend werden Netze trainiert deren Schichten zwanzig Neuronen enthalten. 
+
+\begin{table}
+\begin{center}
+\centering
+\caption{Verwendete Hyperparameter}
+\vspace{1mm}
+\begin{tabular}{cccc}
+\hline\hline
+Hyperparamter & Verwendete Werte & \\
+\hline
+Anzahl Neuronen & 1 & 10 & 20 \\
+Lern-Rate       & 0.01 & 0.005 & \\
+Epochen & 10.000 & 100.000 & \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Um die Kostenfunktion zu optimieren, wurde ein Gradientenverfahren angewandt, dessen Lern-Rate einmal $0.01$ und $0.005$ betrug. Es wurden jeweils einmal 10.000 und 100.000 Trainingsschritte unternommen. Insgesamt wurden somit 36 Modelle trainiert. Um die Güte der Vorhersagen zu quantifizieren wurden sogenannte \textit{Receiver-Operator-Characteristic (ROC)} Kurven gezeichnet sowie die Fläche unter den jeweiligen Kurven (AUC) berechnet.  
 
 \begin{figure}
 \centering
 \caption{Neuronales Netz mit zwei versteckten Schichten.}
+\label{NN2L}
 \vspace{2mm}
 \begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
 \foreach \m/\1 [count=\y] in {1, 2, missing, 3}
@@ -337,9 +358,25 @@ Der Ausdruck in \ref{backProp2} besagt, dass die Rate mit der das Gewicht gelern
 \end{figure}
 
 
+Die ROC-Kurve wird ermittelt, indem man auf Basis der geschätzten Wahrscheinlichkeiten eines Test-Datensatzes Vorhersagen trifft. Diese Vorhersagen werden in die vier Felder einer sogenannten Konfusionsmatrix eingeordnet. Die Vorhersage kann entweder zutreffen, das heißt einem Unternehmen wurde vorhergesagt, dass es nicht in der Lage sein wird einen Kredit zu bedienen und es ist tatsächlich nicht in der Lage (TP). Beziehungsweise es wird korrekterweise vorhergesagt, dass es solvent sein wird (TN). Oder die Vorhersage trifft nicht ein, einem solventen Unternehmen wurde die Insolvenz vorhergesagt (FP), beziehungsweise einem insolventen Unternehmen wurde fälschlicherweise die Kreditwürdigkeit vorhergesagt (FN). Damit sind alle möglichen Fälle erschöpft. Aus dieser Einteilung lassen sich die Falsch-Positiv-Rate (FPR), der Anteil aller fälschlichen positiven Vorhersagen von allen eingetroffenen negativen Ausgängen
+
+\begin{equation}
+FPR = \frac{FP}{FP + TN}
+\end{equation}
+
+und die Sensitivität (TPR), das Verhältnis aller wahren positiven Vorhersagen und aller positiven Ausgänge berechnen
+
+\begin{equation}
+TPR = \frac{TP}{TP + FN}.
+\end{equation}
+
+Die Fläche unter der Kurve ist ein Maß für die Vorhersagekraft eines Modells, wobei ein perfektes Modell einen AUC-Wert von eins annimmt. Ein AUC-Wert von 0.5 hingegen besagt, dass das Modell dieselbe prädiktive Kraft besitzt, wie der Wurf einer fairen Münze.
+
+
 \begin{figure}
 \centering
 \caption{Neuronales Netz mit f{\"u}nf versteckten Schichten.}
+\label{fiveLayers}
 \vspace{2mm}
 \begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
 % input
@@ -410,6 +447,26 @@ Der Ausdruck in \ref{backProp2} besagt, dass die Rate mit der das Gewicht gelern
 
 
 \subsection{Ergebnisse}
+
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{../rocNN1L.png}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{../rocNN2L.png}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{../rocNN5L.png}
+\end{figure}
+%#################################################################################################
+%########################################## CONTINUE ME ##########################################
+%################################################################################################
+
 
 \section{Zusammenfassung}
 \end{document}
