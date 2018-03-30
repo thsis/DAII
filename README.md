@@ -29,12 +29,13 @@ This section outlines my train of thought. I believe this order is the best way 
     for neural net with two hidden layers.
     - __NN5L__ [defined here](https://github.com/thsis/DAII/blob/master/models/ann.py): function class
     for neural net with five hidden layers (which for most applications is probably overkill).
+
 3. Plot Roc curves and contour plots for the previously implemented neural networks.
-    - __graphs.py__: 2D-contour plots of the neural network's output.
-    - __roc.py__: Receiver Operator Characteristic for the neural network's predictions.
+    - __graphs.py__ [defined here](https://github.com/thsis/DAII/blob/master/utils/graphs.py): 2D-contour plots of the neural network's output.
+    - __roc.py__ [defined here](https://github.com/thsis/DAII/blob/master/utils/roc.py): Receiver Operator Characteristic for the neural network's predictions.
 
 4. Create configuration files that can be looped over.
-    - __generate_configs.py__ [defined here](https://github.com/thsis/DAII/blob/master/utils/generate_configs.py)]: an elegant way to train multiple models is to unpack the key-value-pairs of a dictionary. For this one can use the syntax `foo(**dict)`.
+    - __generate_configs.py__ [defined here](https://github.com/thsis/DAII/blob/master/utils/generate_configs.py): an elegant way to train multiple models is to unpack the key-value-pairs of a dictionary. For this one can use the syntax `foo(**dict)`.
 
 5. Perform grid-search.
-    - __main.py__ [defined here](https://github.com/thsis/DAII/blob/master/main.py)]: Contains the training loop and plots the figures.
+    - __main.py__ [defined here](https://github.com/thsis/DAII/blob/master/main.py): Contains the training loop and plots the figures.
