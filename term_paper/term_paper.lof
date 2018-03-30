@@ -1,4 +1,8 @@
 \select@language {german}
-\contentsline {figure}{\numberline {1}{\ignorespaces Neuronales Netz mit einer versteckten Schicht.}}{8}{figure.1}
-\contentsline {figure}{\numberline {2}{\ignorespaces Neuronales Netz mit zwei versteckten Schichten.}}{10}{figure.2}
-\contentsline {figure}{\numberline {3}{\ignorespaces Neuronales Netz mit f{\"u}nf versteckten Schichten.}}{11}{figure.3}
+\contentsline {figure}{\numberline {1}{\ignorespaces Neuronales Netz mit einer versteckten Schicht.}}{9}{figure.1}
+\contentsline {figure}{\numberline {2}{\ignorespaces Neuronales Netz mit zwei versteckten Schichten.}}{11}{figure.2}
+\contentsline {figure}{\numberline {3}{\ignorespaces Neuronales Netz mit f{\"u}nf versteckten Schichten.}}{12}{figure.3}
+\contentsline {figure}{\numberline {4}{\ignorespaces Entscheidungsgrenzen des einfachen Netzwerkes}}{13}{figure.4}
+\contentsline {figure}{\numberline {5}{\ignorespaces ROC-Kurve Neuronaler Netze mit einer versteckten Schicht}}{14}{figure.5}
+\contentsline {figure}{\numberline {6}{\ignorespaces ROC-Kurve Neuronaler Netze mit zwei versteckten Schichten}}{16}{figure.6}
+\contentsline {figure}{\numberline {7}{\ignorespaces ROC-Kurve Neuronaler Netze mit f{\"u}nf versteckten Schichten}}{17}{figure.7}

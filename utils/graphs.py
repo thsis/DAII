@@ -39,6 +39,17 @@ def setup_contours(data, x, y, model):
 
 
 def plot_decision_boundary(data, x, y, labels, model, **kwargs):
+    """
+    Plot contours of neural networks.
+    --------------------------------------
+    Parameters:
+        - data: a pandas data frame.
+        - x: a string of the column name that contains the variable for x-axis.
+        - y: a string of the column name that contains the variable for y-axis.
+        - labels: a string of the column-name that contains the class labels.
+        - model: an instance of class NN1L NN2L or NN5L.
+        - keyword arguments to matplotlib's plot function.
+    """
     xx, yy, Z = setup_contours(data=data, x=x, y=y, model=model)
 
     x0, x1 = data[x].values, data[y].values

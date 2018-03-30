@@ -3,5 +3,13 @@
 \BOOKMARK [1][-]{section.3}{Methoden}{}% 3
 \BOOKMARK [2][-]{subsection.3.1}{Neuronale Netze}{section.3}% 4
 \BOOKMARK [2][-]{subsection.3.2}{Architekturen und Hyperparameter}{section.3}% 5
-\BOOKMARK [2][-]{subsection.3.3}{Ergebnisse}{section.3}% 6
-\BOOKMARK [1][-]{section.4}{Zusammenfassung}{}% 7
+\BOOKMARK [1][-]{section.4}{Ergebnisse}{}% 6
+\BOOKMARK [2][-]{subsection.4.1}{Eine versteckte Schicht}{section.4}% 7
+\BOOKMARK [2][-]{subsection.4.2}{Zwei versteckte Schichten}{section.4}% 8
+\BOOKMARK [2][-]{subsection.4.3}{F\374nf versteckte Schichten}{section.4}% 9
+\BOOKMARK [1][-]{section.5}{Zusammenfassung und kritische W\374rdigung}{}% 10
+\BOOKMARK [1][-]{section.6}{Anhang}{}% 11
+\BOOKMARK [2][-]{subsection.6.1}{Code: Hilfsfunktionen}{section.6}% 12
+\BOOKMARK [2][-]{subsection.6.2}{Code: Datenaufbereitung}{section.6}% 13
+\BOOKMARK [2][-]{subsection.6.3}{Code: Modelle}{section.6}% 14
+\BOOKMARK [2][-]{subsection.6.4}{Code: Training}{section.6}% 15
