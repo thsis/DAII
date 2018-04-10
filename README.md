@@ -15,6 +15,50 @@ If you are my lecturer I have to clarify that I don't consider the README to be 
 1. Install git for Windows [from here](https://gitforwindows.org/). This ensures that you have access to *BASH*. Open git-Bash and follow the steps for Linux and Mac
 2. Alternatively you can use the Windows-command-line performing the same steps.
 
+## How to use the neural network architectures
+### Network with one hidden layer
+
+For a simple neural network with only one hidden layer you can use the `NN1L` class. First, create an instance then you can train the network. Assuming you have your features stored in a `numpy.ndarray` named `X` and your labels stored as a column vector `y` (i.e. `y.shape`=`(n, 1)`), where $n$ is equal to the number of observations. You can set up a neural network with 10 neurons by running:
+
+```
+from models import ann
+
+nn1l = ann.NN1L(data=X, labels=y, units=10)
+```
+
+Training is done by the `train` method. You can control the training-process through the parameters:
+
+* epochs: Number of training iterations.
+* learn: Learning rate of the gradient descent optimizer.
+
+The `tensorboard` logfiles are stored in `logdir`, it defaults to the current directory. Say you want to train for 100.000 epochs with a learning rate of 0.07
+
+```
+nn1l.train(epochs=100000, learn=0.07)
+```
+
+Predictions can be obtained by running the `predict` method. You only need to specify one parameter `data`, which expects a `numpy.ndarray` whose number of columns matches your initial data.
+
+```
+nn1l.predict(X_test)
+```
+
+### Network with multiple hidden layers
+
+If you are interested in training networks with multiple hidden layers, two and five hidden layers in particular, you can use the `NN2L` and `NN5L`-classes respectively. The only difference to `NN1L`-instances lies in the way they are created. The `units`-parameter expects a sequence that describes the architecture of your network. The first element of the sequence is reserved for the input layer. For a 2-hidden-layer network you need a list or a tuple of length 3. For neural network with five hidden layers you need a sequence of length six. If you have a `ǹumpy.ndarray` `X` with 50 features and want to train a two-layer network with 10 units in the first and 4 units in the second hidden layer you can do that with:
+
+```
+nn2l = ann.NN2L(data=X, labels=y, units=(50, 10, 4))
+```
+
+Say you want to implement a five-layer architecture that starts with 10 units and gradually removes one neuron from each layer until ends with 6. On the same dataset `X` as before you can try:
+
+```
+nn5l = ann.NN5L(data=X, labels=y, units=(50, 10, 9, 8, 7, 6))
+```
+
+The methods for training and predicting are the same as in `NN1L` instances.
+
 ## Guideline through the repository
 This section outlines my train of thought. I believe this order is the best way of understanding what is going on.
 
